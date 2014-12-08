@@ -420,7 +420,7 @@ namespace ArbitrageTerminal
 		{
 			if (_time == new TimeSpan(0, 0, 0))
 			{
-				_time = TimeSpan.Parse(e.Tick.UpdateTime.Split(' ')[1]);
+				_time = TimeSpan.Parse(e.Tick.UpdateTime);
 				_watch.Restart();
 			}
 
@@ -472,7 +472,8 @@ namespace ArbitrageTerminal
 
 				if (stra.Direction == DirectionType.Buy)
 				{
-					if (bid <= stra.Price)
+					//if (bid <= stra.Price)
+					if ((stra.IsMarket ? ask : bid) <= stra.Price)
 					{
 						stra.Status = ArbStatus.Normal;
 						_queueModifiedStra.Enqueue(new Tuple<Stra, string>(stra, "Status")); //用于刷新
@@ -497,7 +498,8 @@ namespace ArbitrageTerminal
 				}
 				else if (stra.Direction == DirectionType.Sell)
 				{
-					if (ask >= stra.Price)
+					//if (ask >= stra.Price)
+					if ((stra.IsMarket ? bid : ask) >= stra.Price)
 					{
 						stra.Status = ArbStatus.Normal;
 						_queueModifiedStra.Enqueue(new Tuple<Stra, string>(stra, "Status")); //用于刷新
